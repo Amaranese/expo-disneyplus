@@ -1,25 +1,43 @@
-import logo from './logo.svg';
-import './App.css';
+import * as React from 'react';
+import { StatusBar } from 'react-native';
+import { registerRootComponent } from 'expo';
+import AppLoading from 'expo-app-loading';
+import { func } from './constants';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+// main navigation stack
+import Stack from './navigation/Stack';
+
+class App extends React.Component {
+  constructor() {
+    super();
+
+    this.state = {
+      isLoading: true
+    };
+  }
+
+  render() {
+    const { isLoading } = this.state;
+
+    if (isLoading) {
+      return (
+        <AppLoading
+          onError={() => {
+            // console.warn
+          }}
+          onFinish={() => this.setState({ isLoading: false })}
+          startAsync={func.loadAssetsAsync}
+        />
+      );
+    }
+
+    return (
+      <React.Fragment>
+        <StatusBar barStyle="light-content" />
+        <Stack />
+      </React.Fragment>
+    );
+  }
 }
 
-export default App;
+registerRootComponent(App);
